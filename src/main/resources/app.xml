@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ttx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+    <!-- injcetion de dépendance Banque -->
+	<bean id="DaoBanqueImpl" class="com.adaming.myapp.daobanque.DaoBanqueImpl"></bean>
+    <bean id="ServiceBanqueImpl" class="com.adaming.myapp.servicebanque.ServiceBanqueImpl">
+        <property name="dao" ref="DaoBanqueImpl"></property>
+        <property name="daobanque" ref="DaoBanqueImpl"></property>
+    </bean>
+    
+    <!-- injcetion de dépendance Client -->
+    <bean id="DaoClientImpl" class="com.adaming.myapp.daoclient.DaoClientImpl"></bean>
+    <bean id="ServiceClientImpl" class="com.adaming.myapp.serviceclient.ServiceClientImpl">
+        <property name="dao" ref="DaoClientImpl"></property>
+        <property name="daoclient" ref="DaoClientImpl"></property>
+    </bean>
+
+    <!-- injcetion de dépendance Compte -->
+    <bean id="DaoCompteImpl" class="com.adaming.myapp.daocompte.DaoCompteImpl"></bean>
+    <bean id="ServiceCompteImpl" class="com.adaming.myapp.servicecompte.ServiceCompteImpl">
+        <property name="dao" ref="DaoCompteImpl"></property>
+        <property name="daoCompte" ref="DaoCompteImpl"></property>
+    </bean>
+
+    <!-- injcetion de dépendance Groupe -->
+    <bean id="DaoGroupeImpl" class="com.adaming.myapp.daogroupe.DaoGroupeImpl"></bean>
+    <bean id="ServiceGroupeImpl" class="com.adaming.myapp.servicegroupe.ServiceGroupeImpl">
+        <property name="dao" ref="DaoGroupeImpl"></property>
+        <property name="daogroupe" ref="DaoGroupeImpl"></property>
+    </bean>
+
+    <!-- injcetion de dépendance Employe -->
+    <bean id="DaoEmployeImpl" class="com.adaming.myapp.daoemployee.DaoEmployeImpl"></bean>
+    <bean id="ServiceEmployeImpl" class="com.adaming.myapp.serviceemployee.ServiceEmployeImpl">
+        <property name="dao" ref="DaoEmployeImpl"></property>
+        <property name="daoEmploye" ref="DaoEmployeImpl"></property>
+    </bean>
+                   
+    <!-- injcetion de dépendance Operation -->
+    <bean id="DaoOperationImpl" class="com.adaming.myapp.daooperation.DaoOperationImpl"></bean>
+    <bean id="ServiceOperationImpl" class="com.adaming.myapp.serviceoperation.ServiceOperationImpl">
+        <property name="dao" ref="DaoOperationImpl"></property>
+        <property name="daoOperation" ref="DaoOperationImpl"></property>
+    </bean>
+    
+    <!-- configuration jpa/spring -->
+
+    <bean id="datasource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value="jdbc:mysql://localhost/projet_gestion_banque"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value=""></property>
+    </bean>
+    <bean id="PersistenceUnitManager"
+        class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+        <property name="defaultDataSource" ref="datasource"></property>
+        <property name="persistenceXmlLocations">
+            <list>
+                <value>classpath*:META-INF/persistence.xml</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="EntityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitManager" ref="PersistenceUnitManager"></property>
+        <property name="persistenceUnitName" value="UP_TEST"></property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="EntityManagerFactory"></property>
+    </bean>
+    <ttx:annotation-driven transaction-manager="transactionManager" />
+    <context:annotation-config></context:annotation-config>
+
+
+</beans>
